@@ -1,4 +1,17 @@
-    
+/* FUNCTION SUMMARY
+
+   geo_length
+   geo_angle
+   geo_offset
+   geo_intersect
+   geo_shortest_point
+   geo_arc3p
+   geo_fillet
+   geo_pts_fillet
+
+*/
+
+
 function geo_length( apt1, apt2 ){
     
     var x1, y1, z1,  x2, y2, z2,  dx, dy, dz;
