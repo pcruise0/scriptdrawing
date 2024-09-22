@@ -307,7 +307,7 @@ function geo_fillet( apt1, apt2, apt3, dradii ){
           res[4] : end angle
 */
  
-    var iccw 	= 	ge0_rotation( apt1, apt2, apt3 );
+    var iccw 	= 	geo_rotation( apt1, apt2, apt3 );
  
     var dtheta	=	vector_inner_angle(apt1, apt2, apt3) / 2.0 ;
 
