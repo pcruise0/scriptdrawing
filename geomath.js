@@ -378,6 +378,8 @@ function geo_fillet( apt1, apt2, apt3, dradii ){
 		
 	}
 
+    ares[5] = iccw;          //  cw / ccw
+	
     return ares;	
 }
 
