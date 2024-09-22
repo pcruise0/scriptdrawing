@@ -8,6 +8,7 @@
    geo_arc3p
    geo_fillet
    geo_pts_fillet
+   ge0_rotation
 
 */
 
@@ -305,7 +306,9 @@ function geo_fillet( apt1, apt2, apt3, dradii ){
           res[3] : begin angle
           res[4] : end angle
 */
-
+ 
+    var iccw 	= 	ge0_rotation( apt1, apt2, apt3 );
+ 
     var dtheta	=	vector_inner_angle(apt1, apt2, apt3) / 2.0 ;
 
     var dl_vec1	=	geo_length( apt1, apt2 );
@@ -363,8 +366,17 @@ function geo_fillet( apt1, apt2, apt3, dradii ){
     ares[1] = dyc;          //  yc
     ares[2] = dradii;          //  radii
     
-    ares[3] = geo_angle( oarc, apt_r1);     // bang
-    ares[4] = geo_angle( oarc, apt_r2);     // eang
+	if( iccw == -1 ){
+		
+		ares[3] = geo_angle( oarc, apt_r1);     // bang
+		ares[4] = geo_angle( oarc, apt_r2);     // eang
+		
+	}else if( iccw == 1 ){
+
+		ares[3] = geo_angle( oarc, apt_r2);     // eang
+		ares[4] = geo_angle( oarc, apt_r1);     // bang
+		
+	}
 
     return ares;	
 }
@@ -552,6 +564,34 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
    
 }
 
+function geo_rotation( apt1, apt2, apt3) {
+  
+  // 벡터 외적을 계산하여 방향을 판단
+  var x1 = apt1[0];
+  var x2 = apt2[0];
+  var x3 = apt3[0];
+
+  var y1 = apt1[1];
+  var y2 = apt2[1];
+  var y3 = apt3[1];
+  
+  var crossProduct = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+
+  if (crossProduct > 0) {
+	  
+	return -1; //"반시계방향 (Counter-Clockwise)";
+	
+  } else if (crossProduct < 0) {
+	  
+	return  1; //"시계방향 (Clockwise)";
+	
+  } else {
+	  
+	return  0; //"일직선상 (Collinear)";
+	
+  }
+  
+}	
 
     function vector_norm( avec){
         //$vzero[0]	=	0;
@@ -777,3 +817,5 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
         
         return res;
     }    
+	
+	
