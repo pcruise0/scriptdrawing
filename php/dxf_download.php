@@ -1,5 +1,5 @@
 <?
-include_once("clspuredxf.php");
+include_once("https://rawcdn.githack.com/pcruise0/pacod/e974bcb7f890c59f2a077b26ecd1e3c15b0cfe14/php/clspuredxf.php");
 
 //echo "<script>alert( ' asfer download dxf  ' );</script>";       
 
