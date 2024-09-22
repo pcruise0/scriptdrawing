@@ -66,22 +66,22 @@ var cadobject = new function(){
         // Layer
         var atemp = [];
 
-        for( var i = 0; i < cadgeometry.get_lay_count(); i++ ){
+        for( var i = 0; i < cadobject.get_lay_count(); i++ ){
             
             atemp = []; 
 
-            atemp = cadgeometry.get_lay_posi( i );
+            atemp = cadobject.get_lay_posi( i );
 
             // CAD DATA에 출력
             scontent += "LAYER," + atemp[1] + "," + atemp[2] + "," + atemp[3] + "<br>";  
 
         }
 
-        for( var i = 0; i < cadgeometry.get_object_count(); i++ ){
+        for( var i = 0; i < cadobject.get_object_count(); i++ ){
 
             atemp = []; 
             
-            atemp = cadgeometry.get_object_posi( i );
+            atemp = cadobject.get_object_posi( i );
 
             /*
                 atemp[0] : shape
