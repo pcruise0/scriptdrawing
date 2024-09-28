@@ -390,6 +390,9 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 /*
       input : apts[][2], dradii, dlb : Start Length, dle : End Length (0으로 입력시 그냥 좌표값을 사용)
 
+		데이터 포인트가 2개면 직선
+  		데이터 포인트가 3개 이상이면 철근 절곡
+
       return
           ares[][0] : "ARC"
           ares[][1] : xc
@@ -425,140 +428,156 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
         var dtempl;
   
         var shtml;
+	
+	// 배열의 크기에 따라, 2개면 직선으로 끝내기
+	if( apts.length == 2){
 
-        for( var i = 0; i <= apts.length - 3; i++){
-
-            if( i == 0 ){
-
-                apt1[0] = apts[i][0];   
-                apt1[1] = apts[i][1];   
-                apt1[2] = apts[i][2];  
-
-            } else {
-                // 직전 아크 세그먼트의 종점 좌표..
-                dox     = ares[ ares.length - 1 ][1];
-                doy     = ares[ ares.length - 1 ][2];
-                dradii  = ares[ ares.length - 1 ][3];
-                dbang   = ares[ ares.length - 1 ][4];
-                deang   = ares[ ares.length - 1 ][5];
-    
-                apt1[0] = dox + dradii * Math.cos( deang * Math.PI / 180 );   
-                apt1[1] = doy + dradii * Math.sin( deang * Math.PI / 180 );   
-                apt1[2] = 0;  
-
-            }
-
-            apt2[0] = apts[i + 1][0];   
-            apt2[1] = apts[i + 1][1];   
-            apt2[2] = apts[i + 1][2];   
-    
-            apt3[0] = apts[i + 2][0];   
-            apt3[1] = apts[i + 2][1];   
-            apt3[2] = apts[i + 2][2];   
-    //alert(" here : " + apt1[0] + "," +apt1[1] + "," +apt2[0] + "," +apt2[1] + "," +apt3[0] + "," +apt3[1] );
-//alert( i + " " + apt1[0] + " " + apt1[1] + " " + apt1[2])
-            // calculate circle of 3pts
-            var afillet = geo_fillet( apt1, apt2, apt3, dradii );
-    //alert(" after fillet " + i);
-            dox     = afillet[0];
-            doy     = afillet[1];
-            dradii  = afillet[2];
-            dbang   = afillet[3];
-            deang   = afillet[4];
-//alert( i + " " + dox + " " + doy + " " + dradii + " " + dbang + " " + deang)
-            
-            //alert( i + " radii " + dradii )
-            // 데이터 교체
-            // 직선 구간
-            var iposi = ares.length;
-          
-            ares[ iposi ] = [];
-          
-            ares[ iposi ][0] = "LINE";
-          
-            ares[ iposi ][1] = apt1[0];
-            ares[ iposi ][2] = apt1[1];
-            ares[ iposi ][3] = apt1[2];
-
-            ares[ iposi ][4] = dox + dradii * Math.cos( dbang * Math.PI / 180 );
-            ares[ iposi ][5] = doy + dradii * Math.sin( dbang * Math.PI / 180 );
-            ares[ iposi ][6] = 0;
-          
-            // 현재 계산된 arc
-            iposi = ares.length;
-          
-            ares[ iposi ] = [];
-
-            ares[ iposi ][0] = "ARC";
-          
-            ares[ iposi ][1] = dox;     // Ox
-            ares[ iposi ][2] = doy;     // Oy
-            ares[ iposi ][3] = dradii;  // Radii
-            ares[ iposi ][4] = dbang;   // bang
-            ares[ iposi ][5] = deang;   // eang
-            
-            //alert( i + "  seg " + ares.length )          
-                    
-            //  마지막 데이터
-            if( i == apts.length - 3 ){
-              
-                iposi = ares.length;
-              
-                ares[ iposi ] = [];
-
-                ares[ iposi ][0] = "LINE";
-              
-                ares[ iposi ][1] = dox + dradii * Math.cos( deang * Math.PI / 180 );
-                ares[ iposi ][2] = doy + dradii * Math.sin( deang * Math.PI / 180 );;
-                ares[ iposi ][3] = 0;
-
-                ares[ iposi ][4] = apts[ apts.length - 1 ][0];
-                ares[ iposi ][5] = apts[ apts.length - 1 ][1];
-                ares[ iposi ][6] = apts[ apts.length - 1 ][2];
-              
-            }
-    
-        }
-  
+		var iposi = 0;
+		
+		ares[ iposi ] = [];
+		
+		ares[ iposi ][0] = "LINE";
+		
+		ares[ iposi ][1] = apts[0][0];
+		ares[ iposi ][2] = apts[0][1];
+		ares[ iposi ][3] = apts[0][2];
+		
+		ares[ iposi ][4] = apts[1][0];
+		ares[ iposi ][5] = apts[1][1];
+		ares[ iposi ][6] = apts[1][2];
+				
+	} else {
+		
+		for( var i = 0; i <= apts.length - 3; i++){
+	
+			if( i == 0 ){
+			
+				apt1[0] = apts[i][0];   
+				apt1[1] = apts[i][1];   
+				apt1[2] = apts[i][2];  
+				
+			} else {
+				// 직전 아크 세그먼트의 종점 좌표..
+				dox     = ares[ ares.length - 1 ][1];
+				doy     = ares[ ares.length - 1 ][2];
+				dradii  = ares[ ares.length - 1 ][3];
+				dbang   = ares[ ares.length - 1 ][4];
+				deang   = ares[ ares.length - 1 ][5];
+				
+				apt1[0] = dox + dradii * Math.cos( deang * Math.PI / 180 );   
+				apt1[1] = doy + dradii * Math.sin( deang * Math.PI / 180 );   
+				apt1[2] = 0;  
+			
+			}
+			
+			apt2[0] = apts[i + 1][0];   
+			apt2[1] = apts[i + 1][1];   
+			apt2[2] = apts[i + 1][2];   
+			
+			apt3[0] = apts[i + 2][0];   
+			apt3[1] = apts[i + 2][1];   
+			apt3[2] = apts[i + 2][2];   
+			
+			// calculate circle of 3pts
+			var afillet = geo_fillet( apt1, apt2, apt3, dradii );
+			
+			dox     = afillet[0];
+			doy     = afillet[1];
+			dradii  = afillet[2];
+			dbang   = afillet[3];
+			deang   = afillet[4];
+			
+			// 데이터 교체
+			// 직선 구간
+			var iposi = ares.length;
+			
+			ares[ iposi ] = [];
+			
+			ares[ iposi ][0] = "LINE";
+			
+			ares[ iposi ][1] = apt1[0];
+			ares[ iposi ][2] = apt1[1];
+			ares[ iposi ][3] = apt1[2];
+			
+			ares[ iposi ][4] = dox + dradii * Math.cos( dbang * Math.PI / 180 );
+			ares[ iposi ][5] = doy + dradii * Math.sin( dbang * Math.PI / 180 );
+			ares[ iposi ][6] = 0;
+			
+			// 현재 계산된 arc
+			iposi = ares.length;
+			
+			ares[ iposi ] = [];
+			
+			ares[ iposi ][0] = "ARC";
+			
+			ares[ iposi ][1] = dox;     // Ox
+			ares[ iposi ][2] = doy;     // Oy
+			ares[ iposi ][3] = dradii;  // Radii
+			ares[ iposi ][4] = dbang;   // bang
+			ares[ iposi ][5] = deang;   // eang
+			
+			//alert( i + "  seg " + ares.length )          
+			    
+			//  마지막 데이터
+			if( i == apts.length - 3 ){
+			
+				iposi = ares.length;
+				
+				ares[ iposi ] = [];
+				
+				ares[ iposi ][0] = "LINE";
+				
+				ares[ iposi ][1] = dox + dradii * Math.cos( deang * Math.PI / 180 );
+				ares[ iposi ][2] = doy + dradii * Math.sin( deang * Math.PI / 180 );;
+				ares[ iposi ][3] = 0;
+				
+				ares[ iposi ][4] = apts[ apts.length - 1 ][0];
+				ares[ iposi ][5] = apts[ apts.length - 1 ][1];
+				ares[ iposi ][6] = apts[ apts.length - 1 ][2];
+			
+			}
+	    
+		}
+		
+	}
         // 시점부, 종점부 길이를 보정한다.
         if( dlb != 0 ){
           
-          apt1[0] = ares[0][1];   
-          apt1[1] = ares[0][2];   
-          apt1[2] = ares[0][3];  
+		apt1[0] = ares[0][1];   
+		apt1[1] = ares[0][2];   
+		apt1[2] = ares[0][3];  
+		
+		apt2[0] = ares[0][4];   
+		apt2[1] = ares[0][5];   
+		apt2[2] = ares[0][6];  
+		
+		var dtempl = geo_length( apt1, apt2 );
+		
+		// 시점좌표 보정
+		ares[0][1] = apt2[0] + (apt1[0] - apt2[0]) * dlb / dtempl;
+		ares[0][2] = apt2[1] + (apt1[1] - apt2[1]) * dlb / dtempl;
+		ares[0][3] = apt2[2] + (apt1[2] - apt2[2]) * dlb / dtempl;
 
-          apt2[0] = ares[0][4];   
-          apt2[1] = ares[0][5];   
-          apt2[2] = ares[0][6];  
-
-          var dtempl = geo_length( apt1, apt2 );
-
-          // 시점좌표 보정
-          ares[0][1] = apt2[0] + (apt1[0] - apt2[0]) * dlb / dtempl;
-          ares[0][2] = apt2[1] + (apt1[1] - apt2[1]) * dlb / dtempl;
-          ares[0][3] = apt2[2] + (apt1[2] - apt2[2]) * dlb / dtempl;
-
-          //alert("here " + dtempl + " " + dlb + " " + ares[0][0] + " " + apt1[0]  + " " + apt2[0] + " " + ares[0][0] )          
         }
   
         if( dle != 0 ){
           
-          var iposi = ares.length - 1;
-          
-          apt1[0] = ares[iposi][1];   
-          apt1[1] = ares[iposi][2];   
-          apt1[2] = ares[iposi][3];  
-
-          apt2[0] = ares[iposi][4];   
-          apt2[1] = ares[iposi][5];   
-          apt2[2] = ares[iposi][6];  
-          
-          var dtempl = geo_length( apt1, apt2 );
-          
-          // 종점좌표 보정
-          ares[iposi][4] = apt1[0] + (apt2[0] - apt1[0]) * dlb / dtempl;
-          ares[iposi][5] = apt1[1] + (apt2[1] - apt1[1]) * dlb / dtempl;
-          ares[iposi][6] = apt1[2] + (apt2[2] - apt1[2]) * dlb / dtempl;
+		var iposi = ares.length - 1;
+		
+		apt1[0] = ares[iposi][1];   
+		apt1[1] = ares[iposi][2];   
+		apt1[2] = ares[iposi][3];  
+		
+		apt2[0] = ares[iposi][4];   
+		apt2[1] = ares[iposi][5];   
+		apt2[2] = ares[iposi][6];  
+		
+		var dtempl = geo_length( apt1, apt2 );
+		
+		// 종점좌표 보정
+		ares[iposi][4] = apt1[0] + (apt2[0] - apt1[0]) * dlb / dtempl;
+		ares[iposi][5] = apt1[1] + (apt2[1] - apt1[1]) * dlb / dtempl;
+		ares[iposi][6] = apt1[2] + (apt2[2] - apt1[2]) * dlb / dtempl;
           
         }
   
