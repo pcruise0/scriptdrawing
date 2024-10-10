@@ -292,6 +292,68 @@ function geo_arc3p( apt1, apt2, apt3){
     return	ares;
 }
 
+
+/*
+    chamfer by 3P	: a x b
+*/
+function geo_chamfer( apt1, apt2, apt3, dL12, dL23 ){
+/*
+      input : apt1[2], apt2[2], apt3[2], chamfer a, chamfer b
+
+      return
+          res[0] : x1
+          res[1] : y1
+          res[2] : z1
+          res[3] : x2
+          res[4] : y2
+          res[5] : z2
+*/
+ 
+    //var iccw 	= 	geo_rotation( apt1, apt2, apt3 );
+ 
+    //var dtheta	=	vector_inner_angle(apt1, apt2, apt3) / 2.0 ;
+
+    var dl_vec1	=	geo_length( apt1, apt2 );
+    var dl_vec2	=	geo_length( apt3, apt2 );
+    
+    // 접선까지 거리 : chamfer에서는 주어지므로 필요없음..
+    //var dTL	=	dradii / Math.tan( dtheta * Math.PI / 180.0 );
+  
+    var avec1 = [];
+    var avec2 = [];
+
+    avec1[0]	=	apt1[0] - apt2[0];
+    avec1[1]	=	apt1[1] - apt2[1];
+    avec1[2]	=	apt1[2] - apt2[2];
+    
+    avec2[0]	=	apt3[0] - apt2[0];
+    avec2[1]	=	apt3[1] - apt2[1];
+    avec2[2]	=	apt3[2] - apt2[2];
+  
+    var apt_r1 = [];
+    var apt_r2 = [];
+    var apt_rm = [];
+
+    apt_r1[0]	=	apt2[0] + dL12 / dl_vec1 * avec1[0] ;
+    apt_r1[1]	=	apt2[1] + dL12 / dl_vec1 * avec1[1] ;
+    apt_r1[2]	=	apt2[2] + dL12 / dl_vec1 * avec1[2] ;
+
+    apt_r2[0]	=	apt2[0] + dL23 / dl_vec2 * avec2[0] ;
+    apt_r2[1]	=	apt2[1] + dL23 / dl_vec2 * avec2[1] ;
+    apt_r2[2]	=	apt2[2] + dL23 / dl_vec2 * avec2[2] ;
+    
+    var ares = [];      
+
+    ares[0] = apt_r1[0];         //  x1                
+    ares[1] = apt_r1[1];         //  y1
+    ares[2] = apt_r1[2];         //  z1
+    ares[3] = apt_r2[0];         //  x2
+    ares[4] = apt_r2[1];         //  y2
+    ares[5] = apt_r2[2];         //  z2
+	
+    return ares;	
+}
+
 /*
     fillet by 3P	
 */
