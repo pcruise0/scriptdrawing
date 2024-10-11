@@ -575,7 +575,7 @@ function draw_cad_d3(){
             oY.call(oYaxis.scale(d3.event.transform.rescaleY(yscale)));              
 
             //og.select("path").attr('stroke-width', dthick);
-            //og.selectAll("path").style('stroke-width', dthick / d3.zoom.scale());
+            og.selectAll("path").style('stroke-width', dthick / d3.event.scale());
             //og.selectAll("line").style('stroke-width', dthick / d3.zoom.scale());
             //og.selectAll("svg:line").attr('stroke', 'rgb(255,0,0)');
         }
