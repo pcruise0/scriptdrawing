@@ -636,7 +636,7 @@ function draw_cad_d3(){
             .attr("y1", yscale( dataGroup[i].values[0].y ) )
             .attr("x2", xscale( dataGroup[i].values[1].x ) )
             .attr("y2", yscale( dataGroup[i].values[1].y ) )
-            .attr('stroke-width', dthick ) 
+            .attr('stroke-width', dthick / d3.event.scale() ) 
             .attr('fill', 'none')
             .on("mouseover", function (){ d3.select(this).style("stroke-width", dthick_over );}  )
             .on("mouseout", function(){ d3.select(this).style("stroke-width", dthick ); } );
