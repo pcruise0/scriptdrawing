@@ -721,7 +721,7 @@ function getrgb( icolor ){
 	    if( icolor.toUpperCase() == 'BLACK' ){ scolor =  'rgb(0,0,0)' }   // black
 	    if( icolor.toUpperCase() == 'RED' ){ scolor = 'rgb(255,0,0)' }   // red
 	    if( icolor.toUpperCase() == 'YELLOW' ){ scolor = 'rgb(255,255,0)' }   // yellow       
-	    if( icolor.toUpperCase() == 'GREEN' ){ scolor = 'rgb(0,255,255)' }   // green
+	    if( icolor.toUpperCase() == 'GREEN' ){ scolor = 'rgb(0,255,0)' }   // green
 	    if( icolor.toUpperCase() == 'CYAN' ){ scolor = 'rgb(0,255,255)' }   // cyan
 	    if( icolor.toUpperCase() == 'BLUE' ){ scolor = 'rgb(0,0,255)' }     // blue
 	    if( icolor.toUpperCase() == 'MAGNETA' ){ scolor = 'rgb(255,0,255)' }   // magneta
