@@ -205,7 +205,6 @@ function openxls_click( sobj ){
                                     //alert(" staret laod  " + i + " " + stext[1].toUpperCase() + " " + stext[3].toUpperCase() )							
 									if( stext[1].toUpperCase() == "LAYER" ){
 										//alert("row " + i + " layer " + stext[2])
-										alert( stext[3] )
 										cadobject.add( stext[1], stext[2], get_colorcode( stext[3] ), stext[4]);
 									
 									}else if( stext[1].toUpperCase() == "VAR" ){
@@ -576,8 +575,8 @@ function draw_cad_d3(){
             oY.call(oYaxis.scale(d3.event.transform.rescaleY(yscale)));              
 
             //og.select("path").attr('stroke-width', dthick);
-            og.selectAll("path").style('stroke-width', dthick / d3.event.scale());
-            og.selectAll("line").style('stroke-width', dthick / d3.event.scale());
+            //og.selectAll("path").style('stroke-width', dthick / d3.event.scale());
+            //og.selectAll("line").style('stroke-width', dthick / d3.event.scale());
             //og.selectAll("svg:line").attr('stroke', 'rgb(255,0,0)');
         }
     );
@@ -637,7 +636,7 @@ function draw_cad_d3(){
             .attr("y1", yscale( dataGroup[i].values[0].y ) )
             .attr("x2", xscale( dataGroup[i].values[1].x ) )
             .attr("y2", yscale( dataGroup[i].values[1].y ) )
-            .attr('stroke-width', dthick / d3.event.scale() ) 
+            .attr('stroke-width', dthick ) 
             .attr('fill', 'none')
             .on("mouseover", function (){ d3.select(this).style("stroke-width", dthick_over );}  )
             .on("mouseout", function(){ d3.select(this).style("stroke-width", dthick ); } );
