@@ -205,6 +205,7 @@ function openxls_click( sobj ){
                                     //alert(" staret laod  " + i + " " + stext[1].toUpperCase() + " " + stext[3].toUpperCase() )							
 									if( stext[1].toUpperCase() == "LAYER" ){
 										//alert("row " + i + " layer " + stext[2])
+										alert( get_colorcode( stext[3] ) )
 										cadobject.add( stext[1], stext[2], get_colorcode( stext[3] ), stext[4]);
 									
 									}else if( stext[1].toUpperCase() == "VAR" ){
