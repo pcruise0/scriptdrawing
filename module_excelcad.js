@@ -205,7 +205,7 @@ function openxls_click( sobj ){
                                     //alert(" staret laod  " + i + " " + stext[1].toUpperCase() + " " + stext[3].toUpperCase() )							
 									if( stext[1].toUpperCase() == "LAYER" ){
 										//alert("row " + i + " layer " + stext[2])
-										cadobject.add( stext[1], stext[2], stext[3], stext[4]);
+										cadobject.add( stext[1], stext[2], get_colorcode( stext[3] ), stext[4]);
 									
 									}else if( stext[1].toUpperCase() == "VAR" ){
 										//alert("row " + i + "var "  + stext[2])
@@ -733,6 +733,25 @@ function getrgb( icolor ){
 	
     return scolor;
 }    
+
+function get_colorcode( icolor ){
+
+	if( icolor.toUpperCase() == 'BLACK' ){ scolor =  '0' }   // black
+	if( icolor.toUpperCase() == 'RED' ){ scolor = '1' }   // red
+	if( icolor.toUpperCase() == 'YELLOW' ){ scolor = '2' }   // yellow       
+	if( icolor.toUpperCase() == 'GREEN' ){ scolor = '3' }   // green
+	if( icolor.toUpperCase() == 'CYAN' ){ scolor = '4' }   // cyan
+	if( icolor.toUpperCase() == 'BLUE' ){ scolor = '5' }     // blue
+	if( icolor.toUpperCase() == 'MAGNETA' ){ scolor = '6' }   // magneta
+	if( icolor.toUpperCase() == 'GREY' ){ scolor = '8' } // grey
+	if( icolor.toUpperCase() == 'PURPLE' ){ scolor = '14' }      // purple
+	if( icolor.toUpperCase() == 'WHITE' ){ scolor = '16' }    // white
+	    
+	return scolor;
+
+}
+
+	
 
 
 // convert path bezier data
