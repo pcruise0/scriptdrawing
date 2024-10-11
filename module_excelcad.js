@@ -695,7 +695,7 @@ function getrgb( icolor ){
  
     var scolor;
 
-    if isNum( icolor ) {
+    if isNaN( icolor ) {
 	    
 	    if( icolor == 0 ){ scolor =  'rgb(0,0,0)' }   // black
 	    if( icolor == 1 ){ scolor = 'rgb(255,0,0)' }   // red
