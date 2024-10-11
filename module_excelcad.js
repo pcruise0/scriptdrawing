@@ -695,25 +695,42 @@ function getrgb( icolor ){
  
     var scolor;
 
-    if( icolor == 0 ){ scolor =  'rgb(0,0,0)' }   // black
-    if( icolor == 1 ){ scolor = 'rgb(255,0,0)' }   // red
-    if( icolor == 2 ){ scolor = 'rgb(255,255,0)' }   // yellow       
-    if( icolor == 3 ){ scolor = 'rgb(0,255,255)' }   // green
-    if( icolor == 4 ){ scolor = 'rgb(0,255,255)' }   // cyan
-    if( icolor == 5 ){ scolor = 'rgb(0,0,255)' }     // blue
-    if( icolor == 6 ){ scolor = 'rgb(255,0,255)' }   // magneta
-    if( icolor == 7 ){ scolor = 'rgb(0,0,0)' }       // black
-    if( icolor == 8 ){ scolor = 'rgb(128,128,128)' } // grey
-    if( icolor == 9 ){ scolor = 'rgb(139,0,0)' }     // brown
-    if( icolor == 10 ){ scolor = 'rgb(138,128,0)' }  // khaki
-    if( icolor == 11 ){ scolor = 'rgb(0,128,0)' }      // dark green    
-    if( icolor == 12 ){ scolor = 'rgb(70,130,180)' }     // steel blue
-    if( icolor == 13 ){ scolor = 'rgb(0,0,139)' }        // dark blue
-    if( icolor == 14 ){ scolor = 'rgb(128,0,128)' }      // purple
-    if( icolor == 15 ){ scolor = 'rgb(169,169,169)' }    // dark grey
-    if( icolor == 16 ){ scolor = 'rgb(255,255,255)' }    // white
-    if( icolor == 17 ){ scolor = 'rgb(211,211,211)' }    // ligbht grey    
+    if isNum( icolor ) {
+	    
+	    if( icolor == 0 ){ scolor =  'rgb(0,0,0)' }   // black
+	    if( icolor == 1 ){ scolor = 'rgb(255,0,0)' }   // red
+	    if( icolor == 2 ){ scolor = 'rgb(255,255,0)' }   // yellow       
+	    if( icolor == 3 ){ scolor = 'rgb(0,255,255)' }   // green
+	    if( icolor == 4 ){ scolor = 'rgb(0,255,255)' }   // cyan
+	    if( icolor == 5 ){ scolor = 'rgb(0,0,255)' }     // blue
+	    if( icolor == 6 ){ scolor = 'rgb(255,0,255)' }   // magneta
+	    if( icolor == 7 ){ scolor = 'rgb(0,0,0)' }       // black
+	    if( icolor == 8 ){ scolor = 'rgb(128,128,128)' } // grey
+	    if( icolor == 9 ){ scolor = 'rgb(139,0,0)' }     // brown
+	    if( icolor == 10 ){ scolor = 'rgb(138,128,0)' }  // khaki
+	    if( icolor == 11 ){ scolor = 'rgb(0,128,0)' }      // dark green    
+	    if( icolor == 12 ){ scolor = 'rgb(70,130,180)' }     // steel blue
+	    if( icolor == 13 ){ scolor = 'rgb(0,0,139)' }        // dark blue
+	    if( icolor == 14 ){ scolor = 'rgb(128,0,128)' }      // purple
+	    if( icolor == 15 ){ scolor = 'rgb(169,169,169)' }    // dark grey
+	    if( icolor == 16 ){ scolor = 'rgb(255,255,255)' }    // white
+	    if( icolor == 17 ){ scolor = 'rgb(211,211,211)' }    // ligbht grey    
 
+    } else {
+
+	    if( icolor.toUpperCase() == 'BLACK' ){ scolor =  'rgb(0,0,0)' }   // black
+	    if( icolor.toUpperCase() == 'RED' ){ scolor = 'rgb(255,0,0)' }   // red
+	    if( icolor.toUpperCase() == 'YELLOW' ){ scolor = 'rgb(255,255,0)' }   // yellow       
+	    if( icolor.toUpperCase() == 'GREEN' ){ scolor = 'rgb(0,255,255)' }   // green
+	    if( icolor.toUpperCase() == 'CYAN' ){ scolor = 'rgb(0,255,255)' }   // cyan
+	    if( icolor.toUpperCase() == 'BLUE' ){ scolor = 'rgb(0,0,255)' }     // blue
+	    if( icolor.toUpperCase() == 'MAGNETA' ){ scolor = 'rgb(255,0,255)' }   // magneta
+	    if( icolor.toUpperCase() == 'GREY' ){ scolor = 'rgb(128,128,128)' } // grey
+	    if( icolor.toUpperCase() == 'PURPLE' ){ scolor = 'rgb(128,0,128)' }      // purple
+	    if( icolor.toUpperCase() == 'WHITE' ){ scolor = 'rgb(255,255,255)' }    // white
+	    
+    }
+	
     return scolor;
 }    
 
