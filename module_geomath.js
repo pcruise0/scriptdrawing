@@ -486,7 +486,7 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
         var apt3 = [];
 
         var afillet;
-        var dox, doy, dbang, deang, dradii; 
+        var dox, doy, dbang, deang, dradii, iccw; 
         var dtempl;
   
         var shtml;
@@ -510,8 +510,10 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 				
 	} else {
 		
-		for( var i = 0; i <= apts.length - 3; i++){
-	
+		for( var i = 0; i < apts.length - 2; i++){ // 3점씩 구간별로
+	    
+      //-----------------------------------------------
+      // 3점을 이용한 아크 계산
 			if( i == 0 ){
 			
 				apt1[0] = apts[i][0];   
@@ -525,11 +527,23 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 				dradii  = ares[ ares.length - 1 ][3];
 				dbang   = ares[ ares.length - 1 ][4];
 				deang   = ares[ ares.length - 1 ][5];
-				
-				apt1[0] = dox + dradii * Math.cos( deang * Math.PI / 180 );   
-				apt1[1] = doy + dradii * Math.sin( deang * Math.PI / 180 );   
-				apt1[2] = 0;  
-			
+				iccw    = ares[ ares.length - 1 ][6];
+        
+        // CW / CCW 구분해야함
+        if( iccw == 1){      // 시계방향
+
+          apt1[0] = dox + dradii * Math.cos( dbang * Math.PI / 180 );   
+          apt1[1] = doy + dradii * Math.sin( dbang * Math.PI / 180 );   
+          apt1[2] = 0;  
+
+        }else if( iccw == -1){ // 반시계방향
+          
+          apt1[0] = dox + dradii * Math.cos( deang * Math.PI / 180 );   
+          apt1[1] = doy + dradii * Math.sin( deang * Math.PI / 180 );   
+          apt1[2] = 0;  
+	
+        }
+        
 			}
 			
 			apt2[0] = apts[i + 1][0];   
@@ -541,6 +555,9 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 			apt3[2] = apts[i + 2][2];   
 			
 			// calculate circle of 3pts
+      //    3점이 시계방향이면, 
+      //    dxf 의 문법상..
+      //    시점각 종점각 위치는 반시계방향으로 나온다..
 			var afillet = geo_fillet( apt1, apt2, apt3, dradii );
 			
 			dox     = afillet[0];
@@ -548,9 +565,13 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 			dradii  = afillet[2];
 			dbang   = afillet[3];
 			deang   = afillet[4];
-			
+      iccw    = afillet[5];
+      //-----------------------------------------------
+      
+			//alert( dox + " " + doy + " " + dradii + " " + dbang + " " + deang)
 			// 데이터 교체
-			// 직선 구간
+      //-----------------------------------------------
+			// 시점부 직선 구간
 			var iposi = ares.length;
 			
 			ares[ iposi ] = [];
@@ -561,11 +582,24 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 			ares[ iposi ][2] = apt1[1];
 			ares[ iposi ][3] = apt1[2];
 			
-			ares[ iposi ][4] = dox + dradii * Math.cos( dbang * Math.PI / 180 );
-			ares[ iposi ][5] = doy + dradii * Math.sin( dbang * Math.PI / 180 );
-			ares[ iposi ][6] = 0;
+      // 시계방향 반시계방향에 따라서 각 위치를 고려해줘야함
+      if( iccw == 1){      // 시계방향
+
+        ares[ iposi ][4] = dox + dradii * Math.cos( deang * Math.PI / 180 );
+		  	ares[ iposi ][5] = doy + dradii * Math.sin( deang * Math.PI / 180 );
+	  		ares[ iposi ][6] = 0;
+
+      }else if( iccw == -1){ // 반시계방향
+        
+  			ares[ iposi ][4] = dox + dradii * Math.cos( dbang * Math.PI / 180 );
+		  	ares[ iposi ][5] = doy + dradii * Math.sin( dbang * Math.PI / 180 );
+	  		ares[ iposi ][6] = 0;
+        
+      }        
+      //-----------------------------------------------
 			
-			// 현재 계산된 arc
+      //-----------------------------------------------
+			// 현재 계산된 중앙부 arc
 			iposi = ares.length;
 			
 			ares[ iposi ] = [];
@@ -577,10 +611,13 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 			ares[ iposi ][3] = dradii;  // Radii
 			ares[ iposi ][4] = dbang;   // bang
 			ares[ iposi ][5] = deang;   // eang
+			ares[ iposi ][6] = iccw;    // CCW / CW
 			
+      //-----------------------------------------------
 			//alert( i + "  seg " + ares.length )          
 			    
-			//  마지막 데이터
+      //-----------------------------------------------
+			//  종점부 직선 구간 데이터
 			if( i == apts.length - 3 ){
 			
 				iposi = ares.length;
@@ -588,14 +625,25 @@ function geo_pts_fillet( apts, dradii, dlb, dle ){
 				ares[ iposi ] = [];
 				
 				ares[ iposi ][0] = "LINE";
-				
-				ares[ iposi ][1] = dox + dradii * Math.cos( deang * Math.PI / 180 );
-				ares[ iposi ][2] = doy + dradii * Math.sin( deang * Math.PI / 180 );;
-				ares[ iposi ][3] = 0;
+
+        if( iccw == 1){      // 시계방향
+          
+          ares[ iposi ][1] = dox + dradii * Math.cos( dbang * Math.PI / 180 );
+          ares[ iposi ][2] = doy + dradii * Math.sin( dbang * Math.PI / 180 );;
+          ares[ iposi ][3] = 0;
+          
+        }else if( iccw == -1){ // 반시계방향
+          
+          ares[ iposi ][1] = dox + dradii * Math.cos( deang * Math.PI / 180 );
+          ares[ iposi ][2] = doy + dradii * Math.sin( deang * Math.PI / 180 );;
+          ares[ iposi ][3] = 0;
+          
+        }      
 				
 				ares[ iposi ][4] = apts[ apts.length - 1 ][0];
 				ares[ iposi ][5] = apts[ apts.length - 1 ][1];
 				ares[ iposi ][6] = apts[ apts.length - 1 ][2];
+      //-----------------------------------------------
 			
 			}
 	    
