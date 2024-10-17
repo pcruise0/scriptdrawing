@@ -558,6 +558,9 @@ function svg_init(){
 
 function draw_cad_d3(){
 
+	var iave;
+	var dx, dy;
+
     //draw_axis();
 	svg_init();
 
@@ -606,7 +609,7 @@ function draw_cad_d3(){
             
             og.select("#layer" + dataGroup[i].values[0].layer )
             .append('svg:circle')
-            .attr("id",  dataGroup[i].values[0].name )				
+            .attr("id", dataGroup[i].values[0].name )				
             .attr("cx", xscale( dataGroup[i].values[0].x ) )
             .attr("cy", yscale( dataGroup[i].values[0].y ) )
             //.attr('fill', 'none')
@@ -617,15 +620,15 @@ function draw_cad_d3(){
             .on("mouseover", function (){ d3.select(this).style("stroke-width", dthick_over );}  )
             .on("mouseout", function(){ d3.select(this).style("stroke-width", dthick ); } );
 
-            //.on("mouseover", function(){d3.select(this).style("stroke-width", dwidth_over / zoom.scale() + 'px');})
-            //.on("click", function() {		
-            //                            var scontent =  showinfo( d3.select(this).attr("id") );
-            //                            popup_call( scontent  , d3.event.pageX, d3.event.pageY, 'auto', 'auto' );
-            //                        }
-            //    )
-            //.on("mouseout", function(){ d3.select(this).style("stroke-width", dwidth_out / zoom.scale() + 'px'); } );			
-            
-        //            alert('d3 point');
+			og.select("#layer" + dataGroup[i].values[0].layer )
+			.append("text")
+			.text( dataGroup[i].values[0].name )
+			.attr("x", xscale( dataGroup[i].values[0].x ) )
+			.attr("y", yscale( dataGroup[i].values[0].y ) - dpoint_r * 2 )
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "11px")
+			.attr("fill", "black")
+			.attr("text-anchor", "middle");
 
         } else if( dataGroup[i].values[0].shape == "LINE" ){
 
@@ -640,17 +643,37 @@ function draw_cad_d3(){
             .attr('fill', 'none')
             .on("mouseover", function (){ d3.select(this).style("stroke-width", dthick_over );}  )
             .on("mouseout", function(){ d3.select(this).style("stroke-width", dthick ); } );
+			
+			og.select("#layer" + dataGroup[i].values[0].layer )
+			.append("text")
+			.text( dataGroup[i].values[0].name )
+			.attr("x", xscale( 0.5 * ( dataGroup[i].values[0].x  + dataGroup[i].values[1].x ) ) )
+			.attr("y", yscale( 0.5 * ( dataGroup[i].values[0].y  + dataGroup[i].values[1].y ) - dpoint_r * 2 ) )
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "11px")
+			.attr("fill", "black")
+			.attr("text-anchor", "middle");
+			
 
         } else if ( dataGroup[i].values[0].shape == "ARC"){
 
             var vertex = [];
+			
+			iave = 0;
+			dx = 0;
+			dy = 0;
 
             for( var j = 0; j < dataGroup[i].values.length; j++ ){
                 var iposi = vertex.length;
                 vertex[iposi] = [];
                 vertex[iposi]['x'] = xscale( dataGroup[i].values[j].x );
                 vertex[iposi]['y'] = yscale( dataGroup[i].values[j].y );
+				
+				iave = iave + 1;
+				dx = dx + vertex[iposi]['x'];
+				dy = dy + vertex[iposi]['y'];
             }
+			
 
             og.select("#layer" + dataGroup[i].values[0].layer )
             .append('svg:path') 
@@ -661,16 +684,37 @@ function draw_cad_d3(){
             .attr('fill', 'none')
             .on("mouseover", function (){ d3.select(this).style("stroke-width", dthick_over );}  )
             .on("mouseout", function(){ d3.select(this).style("stroke-width", dthick ); } );
+			
+			og.select("#layer" + dataGroup[i].values[0].layer )
+			.append("text")
+			.text( dataGroup[i].values[0].name )
+			.attr("x", dx / iave )
+			.attr("y", dy / iave )
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "11px")
+			.attr("fill", "black")
+			.attr("text-anchor", "middle");			
 
         } else if ( dataGroup[i].values[0].shape == "CIRCLE"){
 
             var vertex = [];
 
+			iave = 0;
+			dx = 0;
+			dy = 0;
+
             for( var j = 0; j < dataGroup[i].values.length; j++ ){
+				
                 var iposi = vertex.length;
+				
                 vertex[iposi] = [];
                 vertex[iposi]['x'] = xscale( dataGroup[i].values[j].x );
                 vertex[iposi]['y'] = yscale( dataGroup[i].values[j].y );
+
+				iave = iave + 1;
+				dx = dx + vertex[iposi]['x'];
+				dy = dy + vertex[iposi]['y'];
+				
             }
 
             og.select("#layer" + dataGroup[i].values[0].layer )
@@ -682,6 +726,16 @@ function draw_cad_d3(){
             .attr('fill', 'none')
             .on("mouseover", function (){ d3.select(this).style("stroke-width", dthick_over );}  )
             .on("mouseout", function(){ d3.select(this).style("stroke-width", dthick ); } );
+
+			og.select("#layer" + dataGroup[i].values[0].layer )
+			.append("text")
+			.text( dataGroup[i].values[0].name )
+			.attr("x", dx / iave )
+			.attr("y", dy / iave )
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "11px")
+			.attr("fill", "black")
+			.attr("text-anchor", "middle");
 
         }
 
@@ -772,4 +826,3 @@ function d3_path( apts ){
     return sPath
 
 }
-
