@@ -1,5 +1,6 @@
 
 geomath
-      : layer정보는 나중에 rebar에서 부여
+      : layer정보는 나중에 rebar에서 부여    
+      : rebar에서 geomath 반환값 참조시, 배열 위치 수정해야함
 
 
