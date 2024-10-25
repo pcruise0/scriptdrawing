@@ -4,3 +4,7 @@ geomath
       : rebar에서 geomath 반환값 참조시, 배열 위치 수정해야함
 
 
+geomath_fillet_pts로 뼈대 세우고
+
+rebar_double_line으로 철근 / 끝단 마무리
+
