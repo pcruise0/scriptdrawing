@@ -48,14 +48,22 @@ var cadobject = new function(){
 	var iobjposi, sid, srefid, irep, x1, y1, x2, y2, dx, dy, radius;
 	var bang, eang, dr, dtheta, doff;
 	var scolor, sltype, slayer;
+
+	var otbar_tipb	= [];
+	var otbar_tipe	= [];
+	var otbar_segment = [];
 	
-	this.init = function(){
+   this.init = function(){
 
         ocadobj  = [];
         ocadvar  = [];
         ocadlay  = [];
+	   
+        otbar_tipb  = [];
+        otbar_tipe  = [];
+        otbar_segment  = [];
 
-	}
+   }
 
     this.prt_dxf = function(){
         
@@ -121,12 +129,12 @@ var cadobject = new function(){
 
     }
   
-	this.add = function( sshape, scomm, sdat1, sdat2, sdat3, sdat4, sdat5, sdat6, sdat7, sdat8){
+   this.add = function( sshape, scomm, sdat1, sdat2, sdat3, sdat4, sdat5, sdat6, sdat7, sdat8){
                                     // id    layer (refid)
         sshape = sshape.toUpperCase();
         scomm = scomm.toUpperCase(); 
     
-		if ( sshape == "LAYER") {
+	if ( sshape == "LAYER") {
        
             sid = scomm.toUpperCase();
             //scolor = sdat1;
@@ -154,7 +162,7 @@ var cadobject = new function(){
                 
             }
 
-		}else if ( sshape == "VAR") {
+	}else if ( sshape == "VAR") {
              
             sid = scomm.toUpperCase();
 
@@ -176,12 +184,12 @@ var cadobject = new function(){
                 
             }
         
-		}else if ( sshape == "POINT") {
+	}else if ( sshape == "POINT") {
  
-            sid = sdat1;
+            sid = sdat1.toUpperCase();
             slayer = sdat2;
 
-			if( scomm == "ADD" ){
+	   if( scomm == "ADD" ){
 
                 // duplicate check
                 if (! this.check_id(sid)){
@@ -201,7 +209,7 @@ var cadobject = new function(){
 
                 }
           
-			}else if( scomm == "COPY" ){	
+	   }else if( scomm == "COPY" ){	
 
 				// sdat1, sdat2,  sdat3, sdat4, sdat5, sdat6
 				// id	, layer, ref_pt, 	dx,    dy, repeat num
@@ -301,7 +309,7 @@ var cadobject = new function(){
 
             }
 			
-		}else if ( sshape == "LINE") {
+	}else if ( sshape == "LINE") {
              
             sid = sdat1.toUpperCase();
             slayer = sdat2.toUpperCase();
@@ -418,11 +426,11 @@ var cadobject = new function(){
 
                             if( i != 1){
 
-                            ocadobj[ iobjposi ].add( sid + "-" + (i-1), sdat2, x1 + dx * i, y1 + dy * i, x2 + dx * i, y2 + dy * i);	// id, layer, x1, y1
+                            	ocadobj[ iobjposi ].add( sid + "-" + (i-1), sdat2, x1 + dx * i, y1 + dy * i, x2 + dx * i, y2 + dy * i);	// id, layer, x1, y1
 
                             }else{
 
-                            ocadobj[ iobjposi ].add( sid , sdat2, x1 + dx * i, y1 + dy * i, x2 + dx * i, y2 + dy * i);	// id, layer, x1, y1
+                            	ocadobj[ iobjposi ].add( sid , sdat2, x1 + dx * i, y1 + dy * i, x2 + dx * i, y2 + dy * i);	// id, layer, x1, y1
 
                             }
                             
@@ -443,6 +451,7 @@ var cadobject = new function(){
                 }        
 
             }else if( scomm == "2P" ){
+				
                 // sdat2 : layer , sdat3 : ref.pt1 , sdat4 : ref.pt2
                 //sid = sdat1.toUpperCase();
                 //alert( "asdfasdf " + sid + " " + sdat3 + " " + sdat4)
@@ -464,12 +473,12 @@ var cadobject = new function(){
                 }
 /*
 */
-			}
+	   }
 			
-		}else if ( sshape == "ARC") {
+	}else if ( sshape == "ARC") {
              
-            sid = sdat1;
-            slayer = sdat2;
+            sid = sdat1.toUpperCase();
+            slayer = sdat2.toUpperCase();
 
 			if( scomm == "ADD" ){
             
@@ -579,15 +588,14 @@ var cadobject = new function(){
 
                 }
 
-			}
+	   }  
 			
-		}else if ( sshape == "CIRCLE") {
+	}else if ( sshape == "CIRCLE") {
              
-            sid = sdat1;
-            slayer = sdat2;
+            sid = sdat1.toUpperCase();
+            slayer = sdat2.toUpperCase();
 
-			if( scomm == "ADD" ){
-
+	   if( scomm == "ADD" ){
 
                 // duplicate check
                 if (! this.check_id(sid)){
@@ -607,9 +615,9 @@ var cadobject = new function(){
 
                 }        
         
-			}else if( scomm == "COPY" ){
+	   }else if( scomm == "COPY" ){
 
-                srefid = sdat3;
+                srefid = sdat3;	
                 
                 var atemp = this.get_info( srefid );
                 
@@ -680,12 +688,87 @@ var cadobject = new function(){
 
             }
                 
-		}
+	}else if ( sshape == "TBAR") {
 
+            sid = sdat1.toUpperCase();
+            slayer = sdat2.toUpperCase();
+		
+	    ' 참고 : function( sshape, scomm, sdat1, sdat2, sdat3, sdat4, sdat5, sdat6, sdat7, sdat8){
+		    
+	   if( scomm.toUpperCase() == "ADD" ){
+
+                // duplicate check
+                if (! this.check_id(sid)){
+
+                    // change var value
+                    ddia = this.replace_var( sdat3 ) * 1.0;
+                    dbend_r = this.replace_var( sdat4 ) * 1.0;
+
+                    iobjposi = ocadobj.length;
+                    ocadobj[ iobjposi ] = new cadtbar();
+                    ocadobj[ iobjposi ].add( sid, slayer, dia, radius);
+                    
+                } else {
+
+                    alert( sid + " is duplicated ");
+
+                }        
+		   
+ 	   }else if( scomm.toUpperCase() == "TIPB" ){
+
+		   atemp = [];
+		   atemp[0] = sdat1.toUpperCase();	' reference id
+		   atemp[1] = sdat2;			' tip length
+		   atemp[2] = sdat3.toUpperCase();	' Cut / Bend
+		   atemp[3] = sdat4;			' angle
+		   atemp[4] = sdat5.toUpperCase();	' CW / CCW
+		   
+		   iobjposi = otbar_tipb.length;
+		   otbar_tipb[ iobjposi ] = atemp;
+		   
+ 	   }else if( scomm.toUpperCase() == "TIPE" ){
+
+		   atemp = [];
+		   atemp[0] = sdat1.toUpperCase();	' reference id
+		   atemp[1] = sdat2;			' tip length
+		   atemp[2] = sdat3.toUpperCase();	' Cut / Bend
+		   atemp[3] = sdat4;			' angle
+		   atemp[4] = sdat5.toUpperCase();	' CW / CCW
+		   
+		   iobjposi = otbar_tipe.length;
+		   otbar_tipe[ iobjposi ] = atemp;
+		   
+ 	   }else if( scomm.toUpperCase() == "SEGMENT" ){
+
+		   atemp = [];
+		   atemp[0] = sdat1.toUpperCase();	' reference id
+		   atemp[1] = sdat2.toUpperCase();	' reference line
+		   atemp[2] = sdat3;			' direction angle
+		   
+		   iobjposi = otbar_segment.length;
+		   otbar_segment[ iobjposi ] = atemp;
+		   
+	   }
+			
 	}
+
+
+   	' TBAR를 계산해서 geometry로 변환
+	for( i = 0 ; i <= ocadobj.length ; i++){
+		
+		if( ocadobj[ i ].id.toUpperCase() == "TBAR" ){
+			
+			' TBAR Geometry 계산하여 object 목록에 추가
+
+			
+			
+		}
+	}
+		
+   }
 	
 	// check id exist
-	this.check_id = function( sid ){
+   this.check_id = function( sid ){
 
         /*
             id 중복시 true 반환
@@ -708,10 +791,10 @@ var cadobject = new function(){
 
 		return bcheck;
 		
-	}
+   } 
   
 	// check var exist
-	this.check_var = function( sid ){
+   this.check_var = function( sid ){
 
 		var bcheck;
 		
@@ -730,7 +813,7 @@ var cadobject = new function(){
 
 		return bcheck;
 		
-	}  
+   }  
 
   // extract object information
 	this.get_info = function( sid ){
@@ -1227,6 +1310,24 @@ function cadarc( ){	// updated
 		return node;
 	}
 
+}
+
+function cadtbar (){		// updated
+	
+	var id		; 	' id;
+	var shape	;
+	var layer	;	' layer;
+	var dia		; 	' rebar diameter
+	var radii	;	' bending radius
+
+	this.add = function(id, layer, dia, radius ){
+
+		this.id		= id;
+		this.shape	= "TBAR" ;
+		this.layer	= layer;
+		this.dia 	= dia * 1.0;
+		this.radii 	= radius * 1.0;
+	}	
 }
 
 function cadcircle (){		// updated
