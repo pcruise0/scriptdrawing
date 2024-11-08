@@ -693,7 +693,7 @@ var cadobject = new function(){
             sid = sdat1.toUpperCase();
             slayer = sdat2.toUpperCase();
 		
-	    ' 참고 : function( sshape, scomm, sdat1, sdat2, sdat3, sdat4, sdat5, sdat6, sdat7, sdat8){
+	    // 참고 : function( sshape, scomm, sdat1, sdat2, sdat3, sdat4, sdat5, sdat6, sdat7, sdat8){
 		    
 	   if( scomm.toUpperCase() == "ADD" ){
 
@@ -717,11 +717,11 @@ var cadobject = new function(){
  	   }else if( scomm.toUpperCase() == "TIPB" ){
 
 		   atemp = [];
-		   atemp[0] = sdat1.toUpperCase();	' reference id
-		   atemp[1] = sdat2;			' tip length
-		   atemp[2] = sdat3.toUpperCase();	' Cut / Bend
-		   atemp[3] = sdat4;			' angle
-		   atemp[4] = sdat5.toUpperCase();	' CW / CCW
+		   atemp[0] = sdat1.toUpperCase();	// reference id
+		   atemp[1] = sdat2;			// tip length
+		   atemp[2] = sdat3.toUpperCase();	// Cut / Bend
+		   atemp[3] = sdat4;			// angle
+		   atemp[4] = sdat5.toUpperCase();	// CW / CCW
 		   
 		   iobjposi = otbar_tipb.length;
 		   otbar_tipb[ iobjposi ] = atemp;
@@ -729,11 +729,11 @@ var cadobject = new function(){
  	   }else if( scomm.toUpperCase() == "TIPE" ){
 
 		   atemp = [];
-		   atemp[0] = sdat1.toUpperCase();	' reference id
-		   atemp[1] = sdat2;			' tip length
-		   atemp[2] = sdat3.toUpperCase();	' Cut / Bend
-		   atemp[3] = sdat4;			' angle
-		   atemp[4] = sdat5.toUpperCase();	' CW / CCW
+		   atemp[0] = sdat1.toUpperCase();	// reference id
+		   atemp[1] = sdat2;			// tip length
+		   atemp[2] = sdat3.toUpperCase();	// Cut / Bend
+		   atemp[3] = sdat4;			// angle
+		   atemp[4] = sdat5.toUpperCase();	// CW / CCW
 		   
 		   iobjposi = otbar_tipe.length;
 		   otbar_tipe[ iobjposi ] = atemp;
@@ -741,9 +741,9 @@ var cadobject = new function(){
  	   }else if( scomm.toUpperCase() == "SEGMENT" ){
 
 		   atemp = [];
-		   atemp[0] = sdat1.toUpperCase();	' reference id
-		   atemp[1] = sdat2.toUpperCase();	' reference line
-		   atemp[2] = sdat3;			' direction angle
+		   atemp[0] = sdat1.toUpperCase();	// reference id
+		   atemp[1] = sdat2.toUpperCase();	// reference line
+		   atemp[2] = sdat3;			// direction angle
 		   
 		   iobjposi = otbar_segment.length;
 		   otbar_segment[ iobjposi ] = atemp;
@@ -753,12 +753,12 @@ var cadobject = new function(){
 	}
 
 
-   	' TBAR를 계산해서 geometry로 변환
+   	// TBAR를 계산해서 geometry로 변환
 	for( i = 0 ; i <= ocadobj.length ; i++){
 		
 		if( ocadobj[ i ].id.toUpperCase() == "TBAR" ){
 			
-			' TBAR Geometry 계산하여 object 목록에 추가
+			// TBAR Geometry 계산하여 object 목록에 추가
 
 			
 			
