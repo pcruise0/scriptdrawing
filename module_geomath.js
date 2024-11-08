@@ -82,89 +82,6 @@ function geo_angle( apt1, apt2 ){
 
     /*
     */
-function geo_offset_rev( apt1, apt2, doffset, dang ){	// direction angle 도입
-        
-    var x1, y1, x2, y2;
-  
-    var dcur_ang, dang;
-    var x3, y3;
-  
-    x1 = apt1[0];
-    y1 = apt1[1];
-    x2 = apt2[0];
-    y2 = apt2[1];
-
-    //  angle from P1 to P2
-    dcur_ang = geo_angle( apt1, apt2 );
-// geo_rotation( apt1, apt2, apt3) {
-
-
-	
-  
-      if( Math.abs( x2 - x1 ) <= 0.0000000001 ) {  
-  
-          // 수직선
-          dang = 90;
-      
-      } else if ( Math.abs( y2 - y1 ) <= 0.0000000001 ) {  
-          // 수평선
-          dang = 0;
-      
-      } else {
-  
-          // 왼쪽에서 오른쪽으로 데이터를 변환해주어야함
-          if( x2 <= x1 ) {
-                  
-          x3 = x1;
-          y3 = y1;
-          
-          x1 = x2;
-          y1 = y2;
-          
-          x2 = x3;
-          y2 = y3;
-          
-          }
-  
-          var appt1 = [];
-          var appt2 = [];
-  
-          appt1[0] = x1;
-          appt1[1] = y1;
-          appt2[0] = x2;
-          appt2[1] = y2;
-          
-          dang	=	geo_angle( appt1, appt2 );
-    
-      }
-    // offset 부호에 따른 방향 설정
-    if( doffset >= 0 ) {
-  
-      dang = dang + 90;
-  
-    } else {
-  
-      dang = dang - 90;
-  
-    }
-      
-    doffset = Math.abs( doffset );
-	
-    //	return lines
-    var atemp = [];
-  
-    atemp[0] = x1 + doffset * Math.cos( dang * Math.PI / 180 );  // x1
-    atemp[1] = y1 + doffset * Math.sin( dang * Math.PI / 180 );  // y1
-    atemp[2] = x2 + doffset * Math.cos( dang * Math.PI / 180 );  // x2
-    atemp[3] = y2 + doffset * Math.sin( dang * Math.PI / 180 );  // y2
-    
-    //atemp[4] = doffset * Math.cos( dang * Math.PI / 180 );  // dx
-    //atemp[5] = doffset * Math.sin( dang * Math.PI / 180);  // dy
-  
-    return atemp;
-
-}
-
 function geo_offset( apt1, apt2, doffset ){
     
     //  angle from P1 to P2
@@ -220,14 +137,14 @@ function geo_offset( apt1, apt2, doffset ){
           dang	=	geo_angle( appt1, appt2 );
     
       }
-    // offset 부호에 따른 방향 설정
+    // offset 부호에 따른 방향 설정 : line은 왼쪽에서 오른쪼쪽으로 가는 방향 기준 오른쪽이 + / 왼쪽이 -
     if( doffset >= 0 ) {
   
-      dang = dang + 90;
+      dang = dang - 90;
   
     } else {
   
-      dang = dang - 90;
+      dang = dang + 90;
   
     }
       
