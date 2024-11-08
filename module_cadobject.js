@@ -1314,11 +1314,11 @@ function cadarc( ){	// updated
 
 function cadtbar (){		// updated
 	
-	var id		; 	' id;
+	var id		; 	// id;
 	var shape	;
-	var layer	;	' layer;
-	var dia		; 	' rebar diameter
-	var radii	;	' bending radius
+	var layer	;	// layer;
+	var dia		; 	// rebar diameter
+	var radii	;	// bending radius
 
 	this.add = function(id, layer, dia, radius ){
 
